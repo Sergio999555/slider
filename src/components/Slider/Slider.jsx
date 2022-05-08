@@ -56,22 +56,40 @@ const descriptions = [
 
 export const Slider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
   const prevImgIndex = activeIndex ? activeIndex - 1 : img.length - 1
   const nextImgIndex = activeIndex === img.length - 1 ? 0 : activeIndex + 1
 
   const handleUpArrowClick = () => setActiveIndex(prevImgIndex)
   const handleDownArrowClick = () => setActiveIndex(nextImgIndex)
 
+  const minSwipeDistance = 50;
+  const onTouchStart = (e) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX)
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+    if (isLeftSwipe || isRightSwipe) isLeftSwipe ? handleUpArrowClick() : handleDownArrowClick();
+  }
+
   return (
       <div className='slider'>
 
-        <div className="slider__img-container">
+        <div className="slider__img-container" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
           <div className='slider__description'>
             <div className='title slider__title'>{titles[activeIndex]}</div>
             <div className='slider__text'>{descriptions[activeIndex]}</div>
             <button className='gen-button slider__button'><FaPlay/>play now</button>
           </div>
-          <div className="slider__img slider__img-active" key={activeIndex}>{img[activeIndex]}</div>
+          <div className="slider__img slider__img-active" key={activeIndex} >{img[activeIndex]}</div>
         </div>
 
         <div className='preview'>
