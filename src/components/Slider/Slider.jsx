@@ -1,5 +1,7 @@
 import React, {useState} from "react"
+import {Link} from 'react-router-dom'
 import {FaChevronUp, FaChevronDown, FaPlay} from 'react-icons/fa'
+import Pulse from 'react-reveal/Pulse';
 
 import slide1 from '../../styles/img/slide1.jpeg'
 import slide2 from '../../styles/img/slide2.jpeg'
@@ -66,11 +68,13 @@ export const Slider = () => {
   const handleDownArrowClick = () => setActiveIndex(nextImgIndex)
 
   const minSwipeDistance = 50;
-  const onTouchStart = (e) => {
-    setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientX)
-  }
 
+  const onTouchStart = (e) => {
+    if (window.innerWidth < 1024) {
+      setTouchEnd(null)
+      setTouchStart(e.targetTouches[0].clientX)
+    }
+  }
   const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX)
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return
@@ -83,52 +87,61 @@ export const Slider = () => {
   return (
       <div className='slider'>
 
-        <div className="slider__img-container" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-          <div className='slider__description'>
-            <div className='title slider__title'>{titles[activeIndex]}</div>
-            <div className='slider__text'>{descriptions[activeIndex]}</div>
-            <button className='gen-button slider__button'><FaPlay/>play now</button>
+          <div className="slider__img-container" onTouchStart={onTouchStart} onTouchMove={onTouchMove}
+               onTouchEnd={onTouchEnd}>
+            <div className='slider__description'>
+              <div className='title slider__title'>{titles[activeIndex]}</div>
+              <div className='slider__text'>{descriptions[activeIndex]}</div>
+              <Link to='/video/'>
+                <button className='gen-button slider__button'><FaPlay/>play now</button>
+              </Link>
+            </div>
+            <div className="slider__img slider__img-active" key={activeIndex}>{img[activeIndex]}</div>
           </div>
-          <div className="slider__img slider__img-active" key={activeIndex} >{img[activeIndex]}</div>
+
+          <div className='preview'>
+            <button className='preview__button preview__button-up' onClick={handleUpArrowClick}>
+              <FaChevronUp className='preview__button-arrow'/>
+            </button>
+
+            <Pulse>
+            <div className='preview__img' onClick={handleUpArrowClick} key={prevImgIndex}>
+              <div className='preview__info'>
+                <div className='title preview__title'>{titles[prevImgIndex]}</div>
+                <div className='preview__duration'>{duration[prevImgIndex]}</div>
+                <button className='gen-button preview__button-genre'>Action</button>
+              </div>
+              <div className='preview__img-prev'>{img[prevImgIndex]}</div>
+            </div>
+            </Pulse>
+
+            <Pulse>
+            <div className='preview__img' key={activeIndex}>
+              <div className='preview__info'>
+                <div className='title preview__title'>{titles[activeIndex]}</div>
+                <div className='preview__duration'>{duration[activeIndex]}</div>
+                <button className='gen-button preview__button-genre'>Action</button>
+              </div>
+              <div className='preview__img-active'>{img[activeIndex]}</div>
+            </div>
+            </Pulse>
+
+            <Pulse>
+            <div className='preview__img' onClick={handleDownArrowClick} key={nextImgIndex}>
+              <div className='preview__info'>
+                <div className='title preview__title'>{titles[nextImgIndex]}</div>
+                <div className='preview__duration'>{duration[nextImgIndex]}</div>
+                <button className='gen-button preview__button-genre'>Action</button>
+              </div>
+              <div className='preview__img-next'>{img[nextImgIndex]}</div>
+            </div>
+            </Pulse>
+
+            <button className='preview__button preview__button-down' onClick={handleDownArrowClick}>
+              <FaChevronDown className='preview__button-arrow'/>
+            </button>
+          </div>
+
         </div>
-
-        <div className='preview'>
-          <button className='preview__button preview__button-up' onClick={handleUpArrowClick}>
-            <FaChevronUp className='preview__button-arrow'/>
-          </button>
-
-          <div className='preview__img' onClick={handleUpArrowClick} key={prevImgIndex}>
-            <div className='preview__info'>
-              <div className='title preview__title'>{titles[prevImgIndex]}</div>
-              <div className='preview__duration'>{duration[prevImgIndex]}</div>
-              <button className='gen-button preview__button-genre'>Action</button>
-            </div>
-            <div className='preview__img-prev'>{img[prevImgIndex]}</div>
-          </div>
-
-          <div className='preview__img' key={activeIndex}>
-            <div className='preview__info'>
-              <div className='title preview__title'>{titles[activeIndex]}</div>
-              <div className='preview__duration'>{duration[activeIndex]}</div>
-              <button className='gen-button preview__button-genre'>Action</button>
-            </div>
-            <div className='preview__img-active'>{img[activeIndex]}</div>
-          </div>
-
-          <div className='preview__img' onClick={handleDownArrowClick} key={nextImgIndex}>
-            <div className='preview__info'>
-              <div className='title preview__title'>{titles[nextImgIndex]}</div>
-              <div className='preview__duration'>{duration[nextImgIndex]}</div>
-              <button className='gen-button preview__button-genre'>Action</button>
-            </div>
-            <div className='preview__img-next'>{img[nextImgIndex]}</div>
-          </div>
-
-          <button className='preview__button preview__button-down' onClick={handleDownArrowClick}>
-            <FaChevronDown className='preview__button-arrow'/>
-          </button>
-        </div>
-
-      </div>
   )
 }
