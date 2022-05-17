@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import {FaChevronUp, FaChevronDown} from 'react-icons/fa';
 
-import {input} from './input/input'
-import {CarouselSlideItem, CarouselSlideItems} from "./CarouselSlideItems/CarouselSliderItems";
+import {movieData} from './movieData'
+import {MovieContent} from "./MovieContent";
+import {MoviesPreview} from "./MoviesPreview";
 
 import './style.scss'
 
 const slideWidth = 15;
-const length = input.length;
-input.push(...input);
+const length = movieData.length;
+movieData.push(...movieData);
 
 export const createItem = (position: number, index: number) => {
   return ({
     styles: {transform: `translateY(${position * slideWidth}em)`},
-    movie: input[index].movie,
+    movie: movieData[index].movie,
   });
 };
 
-const keys = Array.from(Array(input.length).keys());
+const keys = Array.from(Array(movieData.length).keys());
 
 export const Slider = () => {
   const [items, setItems] = useState(keys);
@@ -65,8 +66,8 @@ export const Slider = () => {
 
   return (
       <div className="slider">
-        <CarouselSlideItem activeIndex={activeIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}/>
-        <div className="carousel__dots">
+        <MovieContent activeIndex={activeIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}/>
+        <div className="slider__dots">
           {items.slice(0, length).map((pos, i) => (
               <button key={i} className={i === activeIndex ? 'dot active' : 'dot'}/>
           ))}
@@ -77,7 +78,7 @@ export const Slider = () => {
             <FaChevronUp/>
           </button>
           <div className="preview__img">
-            {items.map((pos, i) => <CarouselSlideItems key={i} idx={i} pos={pos}/>)}
+            {items.map((pos, i) => <MoviesPreview key={i} idx={i} pos={pos}/>)}
           </div>
           <button className="preview__button preview__button-down" onClick={() => nextClick()}>
             <FaChevronDown/>

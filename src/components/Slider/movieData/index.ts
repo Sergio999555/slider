@@ -1,4 +1,4 @@
-export const input = [
+export const movieData = [
   {
     movie: {
       title: 'Love Your Life',
