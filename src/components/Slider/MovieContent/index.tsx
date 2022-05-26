@@ -30,6 +30,7 @@ export const MovieContent = ({activeIndex, onTouchStart, onTouchMove, onTouchEnd
         <div className="slider__img">
           <img src={item.movie.image} alt={item.movie.title}/>
         </div>
+        <div></div>
       </div>
   );
 };
