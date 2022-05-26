@@ -1,10 +1,11 @@
 import React from "react";
 import {FaPlay} from "react-icons/fa";
 
-import {createItem} from '../index'
-import {IMovieContent} from "../../../types";
+import {createItem} from '../slider'
+import {IMovieContent} from "../types";
 
 import './style.scss'
+import styles from '../slider.module.scss'
 
 export const MovieContent = ({activeIndex, onTouchStart, onTouchMove, onTouchEnd}: IMovieContent) => {
   const item = createItem(0, activeIndex);
@@ -21,7 +22,7 @@ export const MovieContent = ({activeIndex, onTouchStart, onTouchMove, onTouchEnd
             Streamlab is a long established fact that a reader will be distracted by the readable content of a page when
             Streamlab at its layout Streamlab.
           </span>
-          <button className="gen-button slider__button">
+          <button className={styles['gen-button'] + ' ' + styles["slider__button"]} >
             <FaPlay/>
             play now
           </button>
